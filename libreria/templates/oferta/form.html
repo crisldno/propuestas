@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Proyecto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xr1AWEoA5QFB1WIuPwnsR+EI9A7eF5tFlWf6mqv/HjZZ5WRg/4ACyXJX9jG8k8/1w0Xt4Lme3n7eJs6jMdsdOQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.js"></script>
+
+    <!-- Agregamos la función de bloqueo al formulario -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("miFormulario").addEventListener("submit", function() {
+                bloquearBoton();
+            });
+        });
+
+        function bloquearBoton() {
+            // Deshabilitar el botón
+            document.getElementById("enviar-propuesta-btn").disabled = true;
+
+            // Puedes agregar aquí la lógica adicional para mostrar un mensaje de carga
+            Swal.fire({
+                title: 'Generando Propuesta',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        }
+    </script>
+    <style>
+        body {
+            background: -webkit-gradient(linear, left bottom, left top, from(#ffffff), to(#d7e5ff));
+            background: -webkit-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+            background: -moz-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+            background: -o-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+            background: linear-gradient(to top, #ffffff 0%, #d7e5ff 100%);
+        }
+        .form-container {
+            max-width: 700px; /* Ajusta el valor según tus necesidades */
+            margin: 0 auto; /* Centra el contenedor horizontalmente */
+        }
+
+
+        .form-control {
+            height: 60px; /* Ajusta la altura según tus necesidades */
+            font-size: 16px; /* Ajusta el tamaño del texto según tus necesidades */
+        }
+    </style>
+</head>
+<body>
+    <div class="container form-container my-5 mx-auto" style="text-align: left;">
+        <div class="form-container" style="max-width: 600px;">
+        <img src="https://www.andesscd.com.co/wp-content/uploads/2023/02/Firma.gif" style="width: 400px;">
+        <form id="miFormulario" enctype="multipart/form-data" method="post" action="{% url 'crear_propuesta' %}" class="my-4">
+        {% csrf_token %}
+
+        <div class="form-group" style="text-align: left;">
+            <label for="tipo_documento"><b>Tipo De Documento:</b></label>
+            <select class="form-control" name="tipo_documento" id="tipo_documento" required>
+                <option value="">--Seleccione una opción--</option>
+                <option value="Cédula">Cédula</option>
+                <option value="Pasaporte">Pasaporte</option>
+                <option value="Cédula Extranjería">Cédula Extranjería</option>
+            </select>
+            {{ form.tipo_documento.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="numero_documento"><b>Numero De Documento:</b></label>
+            <input type="number" class="form-control" name="numero_documento" id="numero_documento" placeholder="" required>            
+            {{ form.numero_documento.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="razon_social_o_nombre"><b>Razón Social o Nombre:</b></label>
+            <input type="text" class="form-control" name="razon_social_o_nombre" id="razon_social_o_nombre" placeholder="" pattern="[A-Za-z0-9 ]+">
+            {{ form.razon_social_o_nombre.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="correo_electronico"><b>Correo Electrónico:</b></label>
+            <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" placeholder="" required>
+            {{ form.correo_electronico.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="plataforma"><b>Plataforma:</b></label>
+            <select class="form-control" name="plataforma" id="plataforma" required>
+                <option value="">--Seleccione una opción--</option>
+                <option value="SIESA">SIESA</option>
+                <option value="ADRESS R.S">ADRESS R.S</option>
+                <option value="SUPER_SALUD">SUPER_SALUD</option>
+                <option value="RUNT">RUNT</option>
+                <option value="CETIL">CETIL</option>
+            </select>
+            {{ form.plataforma.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="tipo_certificado"><b>Tipo De Certificado:</b></label>
+            <select class="form-control" name="tipo_certificado" id="tipo_certificado" required>
+                <option value="">--Seleccione una opción--</option>
+                <option value="10">Facturación Electrónica - Persona Jurídica</option>
+                <option value="11">Facturación Electrónica - Persona Natural</option>
+                <option value="6">Comunidad Académica</option>
+                <option value="9">Pertenencia Empresa</option>
+                <option value="7">Profesional Titulado</option>
+                <option value="8">Representante Legal</option>
+                <option value="12">Función Pública</option>
+                <option value="13">Persona Jurídica</option>
+                <option value="14">Función Pública para SIIF Nación</option>
+                <option value="5">Persona Natural</option>
+                <option value="15">Persona Natural Para Actividad Comercial (Rut)</option>
+            </select>
+            {{ form.tipo_certificado.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="formato_entrega"><b>Formato De Entrega:</b></label>
+            <select class="form-control" name="formato_entrega" id="formato_entrega" required>
+                <option value="">--Seleccione una opción--</option>
+                <option value="Token Físico">Token Físico</option>
+                <option value="Token Digital">Token Digital</option>
+            </select>
+            {{ form.formato_entrega.errors }}
+        </div>
+      
+        <div class="form-group">
+            <label for="cupon_descuento"><b>Código De Descuento:</b></label>
+            <input type="text" class="form-control" name="cupon_descuento" id="cupon_descuento" placeholder="">
+        </div>
+
+        <div class="mb-3"></div>
+      
+        
+      
+        <button type="submit" class="btn btn-primary d-block mx-auto" id="enviar-propuesta-btn">Enviar Propuesta</button>
+        </form>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
+

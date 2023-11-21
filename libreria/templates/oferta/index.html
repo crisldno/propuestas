@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block titulo %} Propuestas {% endblock %}
+
+{% block contenido %}
+<h4>Bienvenido: {{ request.user }}</h4>
+<link href="oferta/styles.css" rel="stylesheet" media="all">
+<style>
+    
+    .confirmacion-eliminar {
+        border: 1px solid #ccc;
+        background-color: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px;
+    }
+
+    .btn-confirmar {
+        background-color: #d9534f;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .btn-cancelar {
+        background-color: #5bc0de;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+    .bg-gra-01 {
+        background: -webkit-gradient(linear, left bottom, left top, from(#ffffff), to(#d7e5ff));
+        background: -webkit-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+        background: -moz-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+        background: -o-linear-gradient(bottom, #ffffff 0%, #d7e5ff 100%);
+        background: linear-gradient(to top, #ffffff 0%, #d7e5ff 100%);
+        
+    }
+    .inner-container {
+        max-width: 100%;
+        background-color: #ffffff; /* Fondo blanco para el contenedor interno */
+        padding: 20px; /* Ajusta el relleno según sea necesario */
+        border-radius: 5px; /* Ajusta el radio del borde según sea necesario */
+        margin: 10px; /* Ajusta el margen según sea necesario */
+        
+    }
+     
+</style>
+
+<div class="container bg-gra-01" max-width: 600px;></div>
+    <div class="inner-container" max-width: 600px;>
+    <h1 class="display-3"></h1>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <img src="https://www.andesscd.com.co/wp-content/uploads/2023/02/Firma.gif" alt="Logo de Andes SCD" width="250" height="150">
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <form method="GET" class="form-inline d-flex align-items-center">
+                <input type="text" name="area-buscar" class="form-control" style="width: 300px; margin-right: 5px;"
+                    placeholder="Buscar Propuesta (Número de documento-Nombre)">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="{% url 'descargar_propuestas' %}" method="get"
+                class="form-inline d-flex align-items-center">
+                <select name="filter" class="form-control" style="margin-right: 10px;">
+                    <option value="por_defecto">--Rango De Tiempo--</option>
+                    <option value="ultimo">Último mes</option>
+                    <option value="ultimos_dos">Últimos dos meses</option>
+                    <option value="ultimos_tres">Últimos tres meses</option>
+                </select>
+                <input type="submit" value="Descargar Excel" class="btn btn-primary">
+            </form>
+        </div>
+    
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-primary" href="{% url 'crear' %}" role="button">Nueva Propuesta</a>
+                {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-lg" href="{% url 'logout' %}" role="button">Salir</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Numero De Propuesta</th>
+                <th>Tipo de Documento</th>
+                <th>Número de Documento</th>
+                <th>Razón Social o Nombre</th>
+                <th>Correo Electrónico</th>
+                <th>Plataforma</th>
+                <th>Tipo de Certificado</th>
+                <th>Formato Entrega</th>
+                <th>Cupón de Descuento</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for propuesta in propuestas %}
+            <tr>
+                <td>{{ propuesta.id }}</td>
+                <td>{{ propuesta.tipo_documento }}</td>
+                <td>{{ propuesta.numero_documento }}</td>
+                <td>{{ propuesta.razon_social_o_nombre }}</td>
+                <td>{{ propuesta.correo_electronico }}</td>
+                <td>{{ propuesta.plataforma }}</td>
+                <td>{{ propuesta.tipo_certificado }}</td>
+                <td>{{ propuesta.formato_entrega }}</td>
+                <td>{{ propuesta.cupon_descuento }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-action btn-success" href="{% url 'informe' propuesta.id %}" role="button"
+                            style="margin-right: 10px;">Visualizar</a>
+
+                        {% if request.user.is_superuser %}
+                        <a class="btn btn-action btn-danger" href="#" data-bs-toggle="modal"
+                            data-bs-target="#confirmacionEliminarModal{{ propuesta.id }}">Eliminar</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+
+
+            <!-- Modal de Confirmación -->
+            <div id="confirmacionEliminarModal{{ propuesta.id }}" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirmar eliminación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de eliminar la propuesta <strong>#{{ propuesta.id }}</strong> del cliente
+                                <strong>{{ propuesta.razon_social_o_nombre }}</strong>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-confirmar"
+                                onclick="eliminarPropuesta('{{ propuesta.id }}')">Confirmar</button>
+                            <button type="button" class="btn btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </tbody>
+        
+    </table>
+    
+
+    
+    
+    <script>
+        function confirmarEliminar(id) {
+            document.getElementById('confirmacionEliminarModal' + id).style.display = 'block';
+        }
+
+        function cancelarEliminacion(id) {
+            document.getElementById('confirmacionEliminarModal' + id).style.display = 'none';
+        }
+
+        function eliminarPropuesta(id) {
+            window.location.href = "{% url 'eliminar_propuesta' 0 %}".replace('0', id);
+        }
+    </script>
+
+    
+    
+
+    
+</div>
+{% endblock %}

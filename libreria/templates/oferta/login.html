@@ -1,0 +1,84 @@
+
+{% load static %}
+
+{% block titulo %}  {% endblock %}
+
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>Propuesta comercial</title>
+
+    <!-- Icons font CSS-->
+    <link href="mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+
+    <!-- Main CSS-->
+    <link href="{% static 'styles.css'%}" rel="stylesheet" media="all">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+
+    <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins">
+
+        <div class="wrapper wrapper--w780">
+            <div class="card card-3">
+                <div class="card-heading">
+                    <img src="https://www.andesscd.com.co/wp-content/uploads/2023/02/Firma.gif" style="width: 50%; height: 50%;">
+                    <div class="card-body">
+                        <h2 class="title">LOGIN</h2>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <label for="{{ form.username.id_for_label }}"></label>
+                                <input class="input--style-3" type="text" placeholder="Nombre de Usuario" name="name">
+                                {{ form.username }}
+                            </div>
+                            <div class="input-group">
+                                <label for="{{ form.password.id_for_label }}"></label>
+                                <input class="input--style-3" type="password" placeholder="Contraseña" name="Contraseña">
+                                {{ form.password }}
+                            </div>
+                            <div class="p-t-10">
+                                <button id="Ingresar" class="btn btn--pill btn--green" type="submit">Ingresar</button>
+                            </div>
+                        </form>
+                        {% if request.user.is_authenticated %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script src="js/global.js"></script>
+    <script src="js/funciones.js"></script>
+
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block titulo %} Crear Nueva Propuesta {% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+    
+    <div class="card-body">
+        <h4 class="card-title">Formato Propuesta</h4>
+
+
+        {% include 'oferta/form.html' %}
+    </div>
+    <div class="card-footer text-muted">
+        
+    </div>
+</div>
+
+{% endblock %}
